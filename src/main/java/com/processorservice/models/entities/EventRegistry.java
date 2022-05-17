@@ -1,0 +1,39 @@
+package com.processorservice.models.entities;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table
+@Getter
+@Setter
+public class EventRegistry {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
+
+    @Column(nullable = false)
+    private boolean rewarded;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private Date timestamp;
+
+    @PrePersist
+    private void onCreate() {
+        timestamp = new Date(System.currentTimeMillis());
+    }
+
+}
