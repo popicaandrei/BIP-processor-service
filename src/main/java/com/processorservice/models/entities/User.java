@@ -1,16 +1,19 @@
 package com.processorservice.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.processorservice.models.enums.RoleType;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "user_metadata")
 @Getter
 @Setter
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -29,28 +32,36 @@ public class User {
     @Column(name = "wallet_address")
     private String walletAddress;
 
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
+
     @Embedded
     @AttributeOverride(name = "number", column = @Column(name = "street_number"))
     private Address cityAddress;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private RoleType role;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "institution_id", nullable = false)
+    @JsonIgnore
     private Institution institution;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<EventRegistry> eventRegistries;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<AuthMedium> authMedium;
 
-    @ManyToMany
-    @JoinTable(
-        name = "event_registry",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name="event_id"))
-    private Set<Event> events;
-
+    public User(String name, String email, String password, RoleType role, String phoneNumber,
+                String walletAddress, Address cityAddress, Institution institution) {
+        this.password = password;
+        this.role = role;
+        this.cityAddress = cityAddress;
+        this.walletAddress = walletAddress;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.name = name;
+        this.institution = institution;
+    }
 }

@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table
+@Table(name = "event_registry")
 @Getter
 @Setter
 public class EventRegistry {

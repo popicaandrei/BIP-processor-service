@@ -1,18 +1,15 @@
 package com.processorservice.models.entities;
 
-import com.sun.istack.NotNull;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 
 @Embeddable
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address {
-
-    @NotNull
     private String street;
-    @NotNull
     private String number;
-    @NotNull
     private String zipCode;
 }
