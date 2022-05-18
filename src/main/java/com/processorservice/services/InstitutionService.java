@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -26,15 +27,24 @@ public class InstitutionService {
                 .orElseThrow(() -> new EntityNotFoundException("Institution not found"));
     }
 
-    public void addInstitution(Institution institution){
+    public void addInstitution(Institution institution) {
         institutionRepository.save(institution);
     }
 
-    public void addEvent(Event event){
-        User userAddingEvent = userDetailsService.getCurrentlyLoggedUser();
-        Institution institution = getInstitution(userAddingEvent.getInstitution().getId());
+    public void addEvent(Event event) {
+        Institution institution = getInstitutionByRepresentative();
         event.setInstitution(institution);
+        log.info("Adding new event with id: {}, for institution with id: {}", event.getId(), institution.getId());
         eventService.addEvent(event);
     }
 
+    public List<Event> getAllEventsByInstitution() {
+        return eventService.getAllEventsByInstitution(getInstitutionByRepresentative());
+    }
+
+    private Institution getInstitutionByRepresentative() {
+        User user = userDetailsService.getCurrentlyLoggedUser();
+        log.info("Getting information regarding institution using the user with mail: {}", user.getEmail());
+        return getInstitution(user.getInstitution().getId());
+    }
 }

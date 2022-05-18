@@ -52,4 +52,15 @@ public class CityController {
         institutionService.addEvent(EventConverter.convertDtoToEntity(eventDto));
     }
 
+    @GetMapping("/events")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EventDto> getAllEventCreatedByInstitution() {
+        log.info("Getting all the events for current institution.");
+        return institutionService.getAllEventsByInstitution().stream()
+                .map(EventConverter::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+
+
 }

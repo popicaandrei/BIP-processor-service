@@ -1,5 +1,6 @@
 package com.processorservice.controllers;
 
+import com.processorservice.models.dtos.CardDto;
 import com.processorservice.models.dtos.RegisterRequest;
 import com.processorservice.models.dtos.UserDto;
 import com.processorservice.services.UserDetailsService;
@@ -33,6 +34,13 @@ public class CitizenController {
     public UserDto getLoggedInUser() {
         log.info("Retrieving currently logged in user");
         return UserConverter.convertEntityToDto(userDetailsService.getCurrentlyLoggedUser());
+    }
+
+    @PostMapping("/cards")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addCard(@RequestBody CardDto cardDto){
+        log.info("Adding a new card with code: {}", cardDto.getCode());
+
     }
 
 }
