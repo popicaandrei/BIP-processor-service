@@ -36,7 +36,6 @@ public class User {
     private String phoneNumber;
 
     @Embedded
-    @AttributeOverride(name = "number", column = @Column(name = "street_number"))
     private Address cityAddress;
 
     @Enumerated(EnumType.STRING)

@@ -31,7 +31,7 @@ public class UserService {
             throw new UserAlreadyExistException("User already registered for this user mail");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setInstitution(institutionService.getInstitution(registerRequest.institutionId()));
+        user.setInstitution(institutionService.getInstitution(registerRequest.getInstitutionId()));
         log.info("User newly registered with mail: {}", user.getEmail());
         userRepository.save(user);
     }
