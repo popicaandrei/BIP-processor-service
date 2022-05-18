@@ -11,12 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController
 @Slf4j
-public class UserController {
+public class CitizenController {
 
     @Autowired
     private UserService userService;
@@ -36,16 +33,6 @@ public class UserController {
     public UserDto getLoggedInUser() {
         log.info("Retrieving currently logged in user");
         return UserConverter.convertEntityToDto(userDetailsService.getCurrentlyLoggedUser());
-    }
-
-    @GetMapping("/institutions/{institutionId}")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_INSTITUTION')")
-    public List<UserDto> getAllUsersForInstitution(@PathVariable Integer institutionId) {
-        log.info("Retrieving all the users for institution with id: {}", institutionId);
-        return userService.getAllUsersByInstitution(institutionId).stream()
-                .map(UserConverter::convertEntityToDto)
-                .collect(Collectors.toList());
     }
 
 }

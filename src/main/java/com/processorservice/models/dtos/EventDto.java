@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
-
 @AllArgsConstructor
 @Data
 @Builder
@@ -18,5 +16,4 @@ public class EventDto {
     private Integer reward;
     private boolean active;
     private boolean validationNeeded;
-    private Date timestamp;
 }
