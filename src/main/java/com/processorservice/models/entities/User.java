@@ -2,9 +2,7 @@ package com.processorservice.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.processorservice.models.enums.RoleType;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -13,6 +11,8 @@ import java.util.Set;
 @Table(name = "user_metadata")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class User {
 

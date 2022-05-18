@@ -28,4 +28,5 @@ public class UserDetailsService implements org.springframework.security.core.use
         String email = principal instanceof UserDetails ? ((UserDetails) principal).getUsername() : principal.toString();
         return userRepository.findByEmail(email);
     }
+
 }

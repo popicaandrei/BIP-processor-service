@@ -1,6 +1,7 @@
 package com.processorservice.models.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.processorservice.models.entities.Address;
 import com.processorservice.models.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +16,8 @@ public class UserDto {
     private Integer id;
     private String name;
     private String email;
-    private String password;
     private String walletAddress;
-    private AddressDto cityAddress;
+    private String phoneNumber;
+    private Address cityAddress;
     private RoleType role;
 }

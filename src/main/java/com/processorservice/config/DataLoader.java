@@ -8,15 +8,15 @@ import com.processorservice.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static com.processorservice.models.enums.RoleType.*;
 
-@Service
+@Configuration
 @Slf4j
 public class DataLoader implements CommandLineRunner {
 
