@@ -41,7 +41,7 @@ public class DataLoader implements CommandLineRunner {
                     CITIZEN, "0771721420", "erd423345", new Address("M.Eminescu", "534", "453244"), institution);
             User adminUser = new User("Admin", "admin@gmail.com", passwordEncoder.encode("pass"),
                     ADMIN, "0755217136", null, null, institution);
-            User institutionUser = new User("Cluj-Napoca", "intitution@gmail.com", passwordEncoder.encode("pass"),
+            User institutionUser = new User("Cluj-Napoca", "institution@gmail.com", passwordEncoder.encode("pass"),
                     INSTITUTION, "0755217136", null, null, institution);
             List<User> users = Arrays.asList(citizenUser, adminUser, institutionUser);
 

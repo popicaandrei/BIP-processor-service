@@ -26,6 +26,7 @@ public class UserConverter {
                 .walletAddress(user.getWalletAddress())
                 .phoneNumber(user.getPhoneNumber())
                 .cityAddress(user.getCityAddress())
+                .institutionName(user.getInstitution().getName())
                 .build();
     }
 

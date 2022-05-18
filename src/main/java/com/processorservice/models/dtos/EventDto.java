@@ -5,14 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @AllArgsConstructor
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class EventDto implements Serializable {
+public class EventDto {
 
     private Integer id;
     private String name;

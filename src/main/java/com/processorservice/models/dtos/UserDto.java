@@ -20,4 +20,5 @@ public class UserDto {
     private String phoneNumber;
     private Address cityAddress;
     private RoleType role;
+    private String institutionName;
 }

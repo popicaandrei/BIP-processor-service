@@ -5,14 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @AllArgsConstructor
 @Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class EventRegistryDto implements Serializable {
+public class EventRegistryDto {
 
     private Integer id;
     private UserDto user;

@@ -17,4 +17,8 @@ public class InstitutionService {
         return institutionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Institution not found"));
     }
+
+    public void addInstitution(Institution institution){
+        institutionRepository.save(institution);
+    }
 }

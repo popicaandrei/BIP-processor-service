@@ -3,14 +3,16 @@ package com.processorservice.services;
 import com.processorservice.config.exceptions.UserAlreadyExistException;
 import com.processorservice.config.exceptions.UserNotFoundException;
 import com.processorservice.models.dtos.RegisterRequest;
+import com.processorservice.models.entities.Institution;
 import com.processorservice.models.entities.User;
 import com.processorservice.repositories.UserRepository;
 import com.processorservice.util.converters.UserConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -40,12 +42,9 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
-    public User getUserById(Integer id) {
-        User user = findById(id);
-        User userLoggedIn = userDetailsService.getCurrentlyLoggedUser().get();
-        if (userLoggedIn.getEmail().equals(user.getEmail()))
-            return user;
-        else throw new AccessDeniedException("Resource access is forbidden.");
+    public List<User> getAllUsersByInstitution(Integer institutionId) {
+        Institution institution = institutionService.getInstitution(institutionId);
+        return userRepository.findAllByInstitution(institution);
     }
 
     private boolean checkUserIfUserExists(String email) {

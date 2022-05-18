@@ -42,7 +42,7 @@ public class User {
     private RoleType role;
 
     @ManyToOne
-    @JoinColumn(name = "institution_id", nullable = false)
+    @JoinColumn(name = "institution_id")
     @JsonIgnore
     private Institution institution;
 
