@@ -61,6 +61,4 @@ public class CityController {
                 .collect(Collectors.toList());
     }
 
-
-
 }

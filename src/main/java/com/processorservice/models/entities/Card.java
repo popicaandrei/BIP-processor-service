@@ -1,17 +1,20 @@
 package com.processorservice.models.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Entity
 @Table
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Card {
 
     @Id
@@ -22,9 +25,9 @@ public class Card {
     private String number;
 
     @Column(name ="valid_to", nullable = false)
-    private String validTo;
+    private Date validTo;
 
     @Column(name ="valid_from", nullable = false)
-    private String validFrom;
+    private Date validFrom;
 
 }

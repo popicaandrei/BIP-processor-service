@@ -5,15 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Date;
+
 @AllArgsConstructor
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CardDto {
 
-    private Integer id;
     private String code;
     private String number;
-    private String validTo;
-    private String validFrom;
+    private Date validTo;
+    private Date validFrom;
 }

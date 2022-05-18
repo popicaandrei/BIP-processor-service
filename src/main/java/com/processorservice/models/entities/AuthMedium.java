@@ -1,9 +1,7 @@
 package com.processorservice.models.entities;
 
 import com.processorservice.models.enums.AuthType;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,6 +9,8 @@ import javax.persistence.*;
 @Table(name = "auth_medium")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class AuthMedium {
 
@@ -19,7 +19,7 @@ public class AuthMedium {
     private Integer id;
 
     @Column(name = "auth_type")
-    @Enumerated(EnumType.STRING)
+    @Enumerated
     private AuthType authType;
 
     private String identificator;
