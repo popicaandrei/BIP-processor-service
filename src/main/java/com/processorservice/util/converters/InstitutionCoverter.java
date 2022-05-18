@@ -8,7 +8,7 @@ public class InstitutionCoverter {
     public static Institution convertDtoToEntity(InstitutionDto dto) {
         return Institution.builder()
                 .name(dto.getName())
-                .walletAdress(dto.getWalletAdress())
+                .walletAdress(dto.getWalletAddress())
                 .build();
     }
 
@@ -16,7 +16,7 @@ public class InstitutionCoverter {
         return InstitutionDto.builder()
                 .id(entity.getId())
                 .name(entity.getName())
-                .walletAdress(entity.getWalletAdress())
+                .walletAddress(entity.getWalletAdress())
                 .build();
     }
 }

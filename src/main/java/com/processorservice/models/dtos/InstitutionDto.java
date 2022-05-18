@@ -12,5 +12,5 @@ import lombok.Data;
 public class InstitutionDto {
     private Integer id;
     private String name;
-    private String walletAdress;
+    private String walletAddress;
 }
