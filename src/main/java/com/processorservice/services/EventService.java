@@ -118,6 +118,7 @@ public class EventService {
                 throw new EventDataException("Card is not valid anymore");
             }
         }
+        if(user.getWalletAddress() == null) throw new EventDataException("Wallet address should not be null");
     }
 
     private EventPayload createMessagePayload(Event event, User user, AuthMedium authMedium, Institution institution) {

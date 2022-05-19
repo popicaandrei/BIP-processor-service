@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 import static com.processorservice.models.enums.AuthType.CARD;
 
-
 @Service
 @Slf4j
 public class AuthMediumService {
