@@ -1,5 +1,6 @@
 package com.processorservice.models.entities;
 
+import com.processorservice.models.enums.AuthType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,7 +24,7 @@ public class Event {
     private String name;
 
     @Column(name = "reward_quantity", nullable = false)
-    private Integer reward;
+    private Double reward;
 
     @Column(nullable = false)
     private boolean active;
@@ -34,6 +35,10 @@ public class Event {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date timestamp;
+
+    @Column(name = "auth_type", nullable = false)
+    @Enumerated
+    private AuthType authType;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "institution_id", nullable = false)

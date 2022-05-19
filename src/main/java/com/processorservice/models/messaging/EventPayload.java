@@ -14,11 +14,11 @@ import java.util.Date;
 public class EventPayload {
 
     private String eventName;
-    private Integer reward;
+    private Double reward;
     private UserPayload user;
     private String institutionWallet;
     private String institutionName;
-    private AuthType authType;
+    private AuthType eventAuthType;
     private String identificator;
     private Date timestamp;
 }

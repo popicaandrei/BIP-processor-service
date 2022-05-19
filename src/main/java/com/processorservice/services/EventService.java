@@ -29,11 +29,12 @@ public class EventService {
     EventRegistryRepository eventRegistryRepository;
     @Autowired
     AuthMediumService authMediumService;
-
-    public void addEvent(Event event) {
-        log.info("Saving new event with id: {}", event.getId());
-        eventRepository.save(event);
-    }
+    @Autowired
+    UserDetailsService userDetailsService;
+    @Autowired
+    InstitutionService institutionService;
+    @Autowired
+    UserService userService;
 
     public Event getEventByName(String name) {
         log.info("Getting event with name: {}", name);
@@ -46,8 +47,15 @@ public class EventService {
                 .orElseThrow(() -> new EntityNotFoundException("Active event not found"));
     }
 
-    public List<Event> getAllEventsByInstitution(Institution institution) {
-        return eventRepository.findAllByInstitution(institution);
+    public void addEvent(Event event) {
+        Institution institution = institutionService.getInstitutionByRepresentative();
+        event.setInstitution(institution);
+        log.info("Adding new event with id: {}, for institution with id: {}", event.getId(), institution.getId());
+        eventRepository.save(event);
+    }
+
+    public List<Event> getAllEventsByInstitution() {
+        return eventRepository.findAllByInstitution(institutionService.getInstitutionByRepresentative());
     }
 
     @Transactional
@@ -57,7 +65,7 @@ public class EventService {
         AuthMedium authMedium = authMediumService.getByIdentificator(eventRequest.getIdentificator());
         User user = authMedium.getUser();
 
-        verifyAuthMedium(eventRequest, user);
+        verifyAuthMedium(eventRequest, user, authMedium, event);
 
         log.info("Event request is triggered for user with email: {}, using authType: {}, with identificator {}," +
                         " event name: {}, reward is {}, assigned institution: {}",
@@ -65,25 +73,46 @@ public class EventService {
                 event.getName(), event.getReward(), user.getInstitution().getName());
 
         if (event.isValidationNeeded()) {
+            log.info("Further validation is needed, the event is not sent to be rewarded");
             eventRegistry = createEventRegistry(event, user, false);
         } else {
             EventPayload eventPayload = createMessagePayload(event, user, authMedium, user.getInstitution());
+            log.info("Message payload is created in order to be sent for reward");
             eventRegistry = createEventRegistry(event, user, true);
             //TODO: send to rabbit
         }
         eventRegistryRepository.save(eventRegistry);
     }
 
+    @Transactional
     public void validateEvent(Integer eventRegistryId) {
         EventRegistry eventRegistry = eventRegistryRepository.findById(eventRegistryId)
                 .orElseThrow(() -> new EntityNotFoundException("Event was not found in registry"));
+        Event event = getActiveEventByName(eventRegistry.getEvent().getName());
+        User user = userService.findById(eventRegistry.getUser().getId());
+        User userValidator = userDetailsService.getCurrentlyLoggedUser();
+        AuthMedium authMedium = authMediumService.getByUserAndAuthType(event.getAuthType(), user);
+
+        log.info("Event request is validated for user with email: {}, using authType: {}, with identificator {}," +
+                        " event name: {}, reward is {}, assigned institution: {}, validation made by {}",
+                user.getEmail(), authMedium.getAuthType(), authMedium.getIdentificator(),
+                event.getName(), event.getReward(), user.getInstitution().getName(), userValidator.getName());
+
+        EventPayload eventPayload = createMessagePayload(event, user, authMedium, user.getInstitution());
+        log.info("Message payload is created after validation in order to be sent for reward");
+
+        //TODO: send to rabbit
+
+        eventRegistry.setRewarded(true);
+        eventRegistry.setValidatorName(user.getName());
+        eventRegistryRepository.save(eventRegistry);
     }
 
-    private void verifyAuthMedium(EventRequest eventRequest, User user) {
-        if (!user.getRole().equals(RoleType.CITIZEN)) {
+    private void verifyAuthMedium(EventRequest eventRequest, User user, AuthMedium authMedium, Event event) {
+        if (!user.getRole().equals(RoleType.CITIZEN) || !(authMedium.getAuthType().equals(event.getAuthType()))) {
             throw new AccessDeniedException("User not allowed to trigger events");
         }
-        if (eventRequest.getAuthType().equals(AuthType.CARD)) {
+        if (event.getAuthType().equals(AuthType.CARD)) {
             Card card = authMediumService.getCardByCode(eventRequest.getIdentificator());
             if (card.getValidTo().before(new Date())) {
                 throw new EventDataException("Card is not valid anymore");
@@ -96,7 +125,7 @@ public class EventService {
                 .eventName(event.getName())
                 .reward(event.getReward())
                 .user(UserConverter.convertUserToUserPayload(user))
-                .authType(authMedium.getAuthType())
+                .eventAuthType(event.getAuthType())
                 .identificator(authMedium.getIdentificator())
                 .institutionWallet(institution.getWalletAdress())
                 .institutionName(institution.getName())

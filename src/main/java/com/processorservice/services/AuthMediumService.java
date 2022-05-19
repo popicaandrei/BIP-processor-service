@@ -3,6 +3,7 @@ package com.processorservice.services;
 import com.processorservice.models.entities.AuthMedium;
 import com.processorservice.models.entities.Card;
 import com.processorservice.models.entities.User;
+import com.processorservice.models.enums.AuthType;
 import com.processorservice.repositories.AuthMediumRepository;
 import com.processorservice.repositories.CardRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +33,15 @@ public class AuthMediumService {
         return authMediumRepository.findByIdentificator(identificator).orElseThrow(EntityNotFoundException::new);
     }
 
-    public Card getCardByCode(String code){
+    public AuthMedium getByUserAndAuthType(AuthType authType, User user) {
+        log.info("Getting authMedium for user: {} with authType: {}", user.getName(), authType.name());
+        return authMediumRepository.findByAuthTypeAndUser(authType, user).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public Card getCardByCode(String code) {
         log.info("Getting card with code: {}", code);
-        return cardRepository.findByCode(code);
+        return cardRepository.findByCode(code)
+                .orElseThrow(() -> new EntityNotFoundException("Card not found"));
     }
 
     @Transactional
@@ -52,7 +59,7 @@ public class AuthMediumService {
     public List<Card> getAllCards() {
         User user = userDetailsService.getCurrentlyLoggedUser();
         List<Card> cards = authMediumRepository.getAuthMediumByAuthTypeAndUser(CARD, user).stream()
-                .map(authMedium -> cardRepository.findByCode(authMedium.getIdentificator()))
+                .map(authMedium -> getCardByCode(authMedium.getIdentificator()))
                 .collect(Collectors.toList());
         log.info("Retrieving all cards for user: {}, found {} cards", user.getId(), cards.size());
         return cards;

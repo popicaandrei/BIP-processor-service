@@ -11,6 +11,7 @@ public class EventConverter {
                 .validationNeeded(dto.isValidationNeeded())
                 .reward(dto.getReward())
                 .active(dto.isActive())
+                .authType(dto.getAuthType())
                 .build();
     }
 
@@ -21,6 +22,7 @@ public class EventConverter {
                 .validationNeeded(event.isValidationNeeded())
                 .reward(event.getReward())
                 .active(event.isActive())
+                .authType(event.getAuthType())
                 .build();
     }
 }

@@ -40,7 +40,6 @@ public class CityController {
 
     @GetMapping("/{institutionId}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_INSTITUTION')")
     public List<UserDto> getAllUsersForInstitution(@PathVariable Integer institutionId) {
         log.info("Retrieving all the users for institution with id: {}", institutionId);
         return userService.getAllUsersByInstitution(institutionId).stream()
@@ -52,14 +51,14 @@ public class CityController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addEvent(@RequestBody EventDto eventDto) {
         log.info("Adding new event with name: {}", eventDto.getName());
-        institutionService.addEvent(EventConverter.convertDtoToEntity(eventDto));
+        eventService.addEvent(EventConverter.convertDtoToEntity(eventDto));
     }
 
     @GetMapping("/events")
     @ResponseStatus(HttpStatus.OK)
     public List<EventDto> getAllEventCreatedByInstitution() {
         log.info("Getting all the events for current institution.");
-        return institutionService.getAllEventsByInstitution().stream()
+        return eventService.getAllEventsByInstitution().stream()
                 .map(EventConverter::convertEntityToDto)
                 .collect(Collectors.toList());
     }

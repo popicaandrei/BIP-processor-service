@@ -13,4 +13,6 @@ public interface AuthMediumRepository extends JpaRepository<AuthMedium, Integer>
     List<AuthMedium> getAuthMediumByAuthTypeAndUser(AuthType authType, User user);
 
     Optional<AuthMedium> findByIdentificator(String identificator);
+
+    Optional<AuthMedium> findByAuthTypeAndUser(AuthType authType, User user);
 }

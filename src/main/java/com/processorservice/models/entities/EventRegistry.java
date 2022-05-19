@@ -29,6 +29,8 @@ public class EventRegistry {
     @Column(nullable = false)
     private boolean rewarded;
 
+    private String validatorName;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date timestamp;
