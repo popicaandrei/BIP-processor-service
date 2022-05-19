@@ -3,6 +3,7 @@ package com.processorservice.controllers;
 import com.processorservice.models.dtos.EventDto;
 import com.processorservice.models.dtos.InstitutionDto;
 import com.processorservice.models.dtos.UserDto;
+import com.processorservice.services.EventService;
 import com.processorservice.services.InstitutionService;
 import com.processorservice.services.UserService;
 import com.processorservice.util.converters.EventConverter;
@@ -27,6 +28,8 @@ public class CityController {
     private InstitutionService institutionService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private EventService eventService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -59,6 +62,13 @@ public class CityController {
         return institutionService.getAllEventsByInstitution().stream()
                 .map(EventConverter::convertEntityToDto)
                 .collect(Collectors.toList());
+    }
+
+    @PutMapping("/events/validate/{eventRegistryId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void validateEvent(@PathVariable Integer eventRegistryId) {
+        log.info("Validating event with id: {}", eventRegistryId);
+        eventService.validateEvent(eventRegistryId);
     }
 
 }

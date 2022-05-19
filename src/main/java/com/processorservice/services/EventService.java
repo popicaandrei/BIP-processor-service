@@ -52,6 +52,7 @@ public class EventService {
 
     @Transactional
     public void triggerEvent(EventRequest eventRequest) {
+        EventRegistry eventRegistry;
         Event event = getActiveEventByName(eventRequest.getEventName());
         AuthMedium authMedium = authMediumService.getByIdentificator(eventRequest.getIdentificator());
         User user = authMedium.getUser();
@@ -63,11 +64,20 @@ public class EventService {
                 user.getEmail(), authMedium.getAuthType(), authMedium.getIdentificator(),
                 event.getName(), event.getReward(), user.getInstitution().getName());
 
-        EventPayload eventPayload = createMessagePayload(event, user, authMedium, user.getInstitution());
-        saveEventRegistry(event, user);
+        if (event.isValidationNeeded()) {
+            eventRegistry = createEventRegistry(event, user, false);
+        } else {
+            EventPayload eventPayload = createMessagePayload(event, user, authMedium, user.getInstitution());
+            eventRegistry = createEventRegistry(event, user, true);
+            //TODO: send to rabbit
+        }
+        eventRegistryRepository.save(eventRegistry);
     }
 
-    //TODO: also add trigger with validation -> put method
+    public void validateEvent(Integer eventRegistryId) {
+        EventRegistry eventRegistry = eventRegistryRepository.findById(eventRegistryId)
+                .orElseThrow(() -> new EntityNotFoundException("Event was not found in registry"));
+    }
 
     private void verifyAuthMedium(EventRequest eventRequest, User user) {
         if (!user.getRole().equals(RoleType.CITIZEN)) {
@@ -94,12 +104,11 @@ public class EventService {
                 .build();
     }
 
-    private void saveEventRegistry(Event event, User user) {
-        EventRegistry eventRegistry = EventRegistry.builder()
+    private EventRegistry createEventRegistry(Event event, User user, boolean rewarded) {
+        return EventRegistry.builder()
                 .event(event)
                 .user(user)
-                .rewarded(true)
+                .rewarded(rewarded)
                 .build();
-        eventRegistryRepository.save(eventRegistry);
     }
 }
