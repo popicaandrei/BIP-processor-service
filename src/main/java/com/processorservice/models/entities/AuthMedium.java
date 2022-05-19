@@ -22,9 +22,10 @@ public class AuthMedium {
     @Enumerated
     private AuthType authType;
 
+    @Column(unique = true)
     private String identificator;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 }

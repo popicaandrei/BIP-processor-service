@@ -12,4 +12,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     List<Event> findAllByInstitution(Institution institution);
 
     Optional<Event> findById(Integer id);
+
+    Optional<Event> findByName(String name);
+
+    Optional <Event> findEventByNameAndActive(String name, boolean active);
 }

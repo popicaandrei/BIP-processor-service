@@ -2,6 +2,7 @@ package com.processorservice.util.converters;
 
 import com.processorservice.models.dtos.RegisterRequest;
 import com.processorservice.models.dtos.UserDto;
+import com.processorservice.models.dtos.UserPayload;
 import com.processorservice.models.entities.User;
 
 public class UserConverter {
@@ -39,6 +40,17 @@ public class UserConverter {
                 .role(registerRequest.getRole())
                 .phoneNumber(registerRequest.getPhoneNumber())
                 .cityAddress(registerRequest.getCityAddress())
+                .build();
+    }
+
+    public static UserPayload convertUserToUserPayload(User user) {
+        return UserPayload.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .walletAddress(user.getWalletAddress())
+                .role(user.getRole())
+                .phoneNumber(user.getPhoneNumber())
+                .cityAddress(user.getCityAddress())
                 .build();
     }
 }

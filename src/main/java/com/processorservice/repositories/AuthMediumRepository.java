@@ -6,8 +6,11 @@ import com.processorservice.models.enums.AuthType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AuthMediumRepository extends JpaRepository<AuthMedium, Integer> {
 
     List<AuthMedium> getAuthMediumByAuthTypeAndUser(AuthType authType, User user);
+
+    Optional<AuthMedium> findByIdentificator(String identificator);
 }

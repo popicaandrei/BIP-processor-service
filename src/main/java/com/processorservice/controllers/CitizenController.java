@@ -1,9 +1,11 @@
 package com.processorservice.controllers;
 
 import com.processorservice.models.dtos.CardDto;
+import com.processorservice.models.dtos.EventRequest;
 import com.processorservice.models.dtos.RegisterRequest;
 import com.processorservice.models.dtos.UserDto;
 import com.processorservice.services.AuthMediumService;
+import com.processorservice.services.EventService;
 import com.processorservice.services.UserDetailsService;
 import com.processorservice.services.UserService;
 import com.processorservice.util.converters.CardConverter;
@@ -27,12 +29,21 @@ public class CitizenController {
     UserDetailsService userDetailsService;
     @Autowired
     AuthMediumService authMediumService;
+    @Autowired
+    EventService eventService;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody RegisterRequest registerRequest) {
         log.info("Registering new user with email: {}", registerRequest.getEmail());
         userService.register(registerRequest);
+    }
+
+    @PostMapping("/public/events")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void triggerEvent(@RequestBody EventRequest eventRequest) {
+        log.info("A new event was triggered with identificator: {}", eventRequest.getIdentificator());
+        eventService.triggerEvent(eventRequest);
     }
 
     @GetMapping("/users")

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,16 @@ public class AuthMediumService {
     CardRepository cardRepository;
     @Autowired
     AuthMediumRepository authMediumRepository;
+
+    public AuthMedium getByIdentificator(String identificator) {
+        log.info("Getting authMedium with identificator: {}", identificator);
+        return authMediumRepository.findByIdentificator(identificator).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public Card getCardByCode(String code){
+        log.info("Getting card with code: {}", code);
+        return cardRepository.findByCode(code);
+    }
 
     @Transactional
     public void addAuthMedium(Card card) {
