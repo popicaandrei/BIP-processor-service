@@ -107,7 +107,7 @@ public class EventService {
         rabbitClient.send(eventPayload);
 
         eventRegistry.setRewarded(true);
-        eventRegistry.setValidatorName(user.getName());
+        eventRegistry.setValidatorName(userValidator.getName());
         eventRegistryRepository.save(eventRegistry);
     }
 
