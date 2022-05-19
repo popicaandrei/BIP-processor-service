@@ -1,6 +1,7 @@
 package com.processorservice.services;
 
 import com.processorservice.config.exceptions.EventDataException;
+import com.processorservice.messaging.RabbitClient;
 import com.processorservice.models.dtos.EventRequest;
 import com.processorservice.models.entities.*;
 import com.processorservice.models.enums.AuthType;
@@ -35,6 +36,8 @@ public class EventService {
     InstitutionService institutionService;
     @Autowired
     UserService userService;
+    @Autowired
+    RabbitClient rabbitClient;
 
     public Event getEventByName(String name) {
         log.info("Getting event with name: {}", name);
@@ -79,7 +82,7 @@ public class EventService {
             EventPayload eventPayload = createMessagePayload(event, user, authMedium, user.getInstitution());
             log.info("Message payload is created in order to be sent for reward");
             eventRegistry = createEventRegistry(event, user, true);
-            //TODO: send to rabbit
+            rabbitClient.send(eventPayload);
         }
         eventRegistryRepository.save(eventRegistry);
     }
@@ -101,7 +104,7 @@ public class EventService {
         EventPayload eventPayload = createMessagePayload(event, user, authMedium, user.getInstitution());
         log.info("Message payload is created after validation in order to be sent for reward");
 
-        //TODO: send to rabbit
+        rabbitClient.send(eventPayload);
 
         eventRegistry.setRewarded(true);
         eventRegistry.setValidatorName(user.getName());
