@@ -63,7 +63,7 @@ public class EventService {
 
     @Transactional
     public void triggerEvent(EventRequest eventRequest) {
-        EventRegistry eventRegistry;
+        EventRegistry eventRegistry = null;
         Event event = getActiveEventByName(eventRequest.getEventName());
         AuthMedium authMedium = authMediumService.getByIdentificator(eventRequest.getIdentificator());
         User user = authMedium.getUser();
@@ -79,7 +79,7 @@ public class EventService {
             log.info("Further validation is needed, the event is not sent to be rewarded");
             eventRegistry = createEventRegistry(event, user, false);
         } else {
-            EventPayload eventPayload = createMessagePayload(event, user, authMedium, user.getInstitution());
+            EventPayload eventPayload = createMessagePayload(eventRegistry, event, user, authMedium, user.getInstitution());
             log.info("Message payload is created in order to be sent for reward");
             eventRegistry = createEventRegistry(event, user, true);
             rabbitClient.send(eventPayload);
@@ -106,7 +106,7 @@ public class EventService {
                 user.getEmail(), authMedium.getAuthType(), authMedium.getIdentificator(),
                 event.getName(), event.getReward(), user.getInstitution().getName(), userValidator.getName());
 
-        EventPayload eventPayload = createMessagePayload(event, user, authMedium, user.getInstitution());
+        EventPayload eventPayload = createMessagePayload(eventRegistry, event, user, authMedium, user.getInstitution());
         log.info("Message payload is created after validation in order to be sent for reward");
 
         rabbitClient.send(eventPayload);
@@ -129,7 +129,7 @@ public class EventService {
         if (user.getWalletAddress() == null) throw new EventDataException("Wallet address should not be null");
     }
 
-    private EventPayload createMessagePayload(Event event, User user, AuthMedium authMedium, Institution institution) {
+    private EventPayload createMessagePayload(EventRegistry eventRegistry, Event event, User user, AuthMedium authMedium, Institution institution) {
         return EventPayload.builder()
                 .eventName(event.getName())
                 .reward(event.getReward())
@@ -138,7 +138,7 @@ public class EventService {
                 .identificator(authMedium.getIdentificator())
                 .institutionWallet(institution.getWalletAdress())
                 .institutionName(institution.getName())
-                .timestamp(new Date())
+                .timestamp(eventRegistry.getTimestamp())
                 .build();
     }
 
