@@ -48,7 +48,6 @@ public class UserConverter {
                 .name(user.getName())
                 .email(user.getEmail())
                 .walletAddress(user.getWalletAddress())
-                .role(user.getRole())
                 .phoneNumber(user.getPhoneNumber())
                 .cityAddress(user.getCityAddress())
                 .build();

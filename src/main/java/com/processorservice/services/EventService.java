@@ -91,6 +91,11 @@ public class EventService {
     public void validateEvent(Integer eventRegistryId) {
         EventRegistry eventRegistry = eventRegistryRepository.findById(eventRegistryId)
                 .orElseThrow(() -> new EntityNotFoundException("Event was not found in registry"));
+
+        if (eventRegistry.isRewarded()) {
+            throw new EventDataException("Event is already rewarded");
+        }
+
         Event event = getActiveEventByName(eventRegistry.getEvent().getName());
         User user = userService.findById(eventRegistry.getUser().getId());
         User userValidator = userDetailsService.getCurrentlyLoggedUser();
@@ -121,7 +126,7 @@ public class EventService {
                 throw new EventDataException("Card is not valid anymore");
             }
         }
-        if(user.getWalletAddress() == null) throw new EventDataException("Wallet address should not be null");
+        if (user.getWalletAddress() == null) throw new EventDataException("Wallet address should not be null");
     }
 
     private EventPayload createMessagePayload(Event event, User user, AuthMedium authMedium, Institution institution) {

@@ -17,9 +17,9 @@ spring:
     port: 5672
     password: guest
     username: guest
-    exchange: event.exchange
-    queue: event.queue
-    routingkey: event.routingkey
+    exchange: bip.exchange
+    queue: bip.queue
+    routingkey: bip.routingkey
 
 server:
   error:
