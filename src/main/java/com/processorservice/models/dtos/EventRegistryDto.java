@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.Date;
-
 @AllArgsConstructor
 @Getter
 @Builder
@@ -18,6 +16,6 @@ public class EventRegistryDto {
     private String userEmail;
     private String userName;
     private String event;
-    private Date timestamp;
+    private String timestamp;
     private AuthType authType;
 }

@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -185,7 +187,12 @@ public class EventService {
                 .userName(user.getName())
                 .event(event.getName())
                 .authType(event.getAuthType())
-                .timestamp(eventRegistry.getTimestamp())
+                .timestamp(dateFormatter(eventRegistry.getTimestamp()))
                 .build();
+    }
+
+    private String dateFormatter(Date date) {
+        DateFormat inputFormatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        return inputFormatter.format(date);
     }
 }
