@@ -67,7 +67,6 @@ public class EventService {
     }
 
     public List<EventRegistryDto> getAllEventsByInstitutionNotValidated() {
-        User user = userDetailsService.getCurrentlyLoggedUser();
         Institution institution = institutionService.getInstitutionByRepresentative();
         List<Event> events = eventRepository.findAllByInstitution(institution);
 
@@ -77,7 +76,7 @@ public class EventService {
 
         return registries.stream()
                 .filter((Objects::nonNull))
-                .map(eventRegistry -> createEventRegistryDto(eventRegistry.getEvent(), user, eventRegistry))
+                .map(eventRegistry -> createEventRegistryDto(eventRegistry.getEvent(), eventRegistry.getUser(), eventRegistry))
                 .collect(Collectors.toList());
     }
 
