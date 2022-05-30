@@ -75,7 +75,7 @@ public class EventService {
 
         return registries.stream()
                 .filter((Objects::nonNull))
-                .map(eventRegistry -> createEventRegistryDto(eventRegistry.getEvent(), user,eventRegistry))
+                .map(eventRegistry -> createEventRegistryDto(eventRegistry.getEvent(), user, eventRegistry))
                 .collect(Collectors.toList());
     }
 
@@ -103,6 +103,16 @@ public class EventService {
             rabbitClient.send(eventPayload);
         }
         eventRegistryRepository.save(eventRegistry);
+    }
+
+    public void validateMultipleEvents(List<Integer> eventRegistryIds) {
+        eventRegistryIds.forEach((eventRegistryId) -> {
+            try {
+                validateEvent(eventRegistryId);
+            } catch (Exception ex) {
+                log.error("Error appeared validating event in registry {}", eventRegistryId);
+            }
+        });
     }
 
     @Transactional
