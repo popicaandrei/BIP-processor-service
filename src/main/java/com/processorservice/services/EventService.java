@@ -2,6 +2,7 @@ package com.processorservice.services;
 
 import com.processorservice.config.exceptions.EventDataException;
 import com.processorservice.messaging.RabbitClient;
+import com.processorservice.models.dtos.EventRegistryDto;
 import com.processorservice.models.dtos.EventRequest;
 import com.processorservice.models.entities.*;
 import com.processorservice.models.enums.AuthType;
@@ -19,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -59,6 +62,21 @@ public class EventService {
 
     public List<Event> getAllEventsByInstitution() {
         return eventRepository.findAllByInstitution(institutionService.getInstitutionByRepresentative());
+    }
+
+    public List<EventRegistryDto> getAllEventsByInstitutionNotValidated() {
+        User user = userDetailsService.getCurrentlyLoggedUser();
+        Institution institution = institutionService.getInstitutionByRepresentative();
+        List<Event> events = eventRepository.findAllByInstitution(institution);
+
+        List<EventRegistry> registries = events.stream()
+                .map((event) -> eventRegistryRepository.findByRewardedAndEvent(false, event).orElse(null))
+                .toList();
+
+        return registries.stream()
+                .filter((Objects::nonNull))
+                .map(eventRegistry -> createEventRegistryDto(eventRegistry.getEvent(), user,eventRegistry))
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -147,6 +165,17 @@ public class EventService {
                 .event(event)
                 .user(user)
                 .rewarded(rewarded)
+                .build();
+    }
+
+    private EventRegistryDto createEventRegistryDto(Event event, User user, EventRegistry eventRegistry) {
+        return EventRegistryDto.builder()
+                .id(eventRegistry.getId())
+                .userEmail(user.getEmail())
+                .userName(user.getName())
+                .event(event.getName())
+                .authType(event.getAuthType())
+                .timestamp(eventRegistry.getTimestamp())
                 .build();
     }
 }

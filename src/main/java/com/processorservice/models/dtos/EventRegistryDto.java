@@ -1,6 +1,7 @@
 package com.processorservice.models.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.processorservice.models.enums.AuthType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,8 +15,9 @@ import java.util.Date;
 public class EventRegistryDto {
 
     private Integer id;
-    private UserDto user;
-    private EventDto event;
-    private boolean rewarded;
+    private String userEmail;
+    private String userName;
+    private String event;
     private Date timestamp;
+    private AuthType authType;
 }

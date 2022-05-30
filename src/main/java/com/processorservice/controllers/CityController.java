@@ -1,6 +1,7 @@
 package com.processorservice.controllers;
 
 import com.processorservice.models.dtos.EventDto;
+import com.processorservice.models.dtos.EventRegistryDto;
 import com.processorservice.models.dtos.InstitutionDto;
 import com.processorservice.models.dtos.UserDto;
 import com.processorservice.services.EventService;
@@ -61,6 +62,13 @@ public class CityController {
         return eventService.getAllEventsByInstitution().stream()
                 .map(EventConverter::convertEntityToDto)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/events/validate")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EventRegistryDto> getAllEventsNotValidated() {
+        log.info("Getting all the events that needs validation.");
+        return eventService.getAllEventsByInstitutionNotValidated();
     }
 
     @PutMapping("/events/validate/{eventRegistryId}")
