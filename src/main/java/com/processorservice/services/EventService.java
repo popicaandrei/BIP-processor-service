@@ -188,6 +188,7 @@ public class EventService {
                 .event(event.getName())
                 .authType(event.getAuthType())
                 .timestamp(dateFormatter(eventRegistry.getTimestamp()))
+                .reward(event.getReward())
                 .build();
     }
 

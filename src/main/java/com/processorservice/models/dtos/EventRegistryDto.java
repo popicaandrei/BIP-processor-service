@@ -17,5 +17,6 @@ public class EventRegistryDto {
     private String userName;
     private String event;
     private String timestamp;
+    private Double reward;
     private AuthType authType;
 }
