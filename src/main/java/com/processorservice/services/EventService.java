@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -70,9 +71,9 @@ public class EventService {
         Institution institution = institutionService.getInstitutionByRepresentative();
         List<Event> events = eventRepository.findAllByInstitution(institution);
 
-        List<EventRegistry> registries = events.stream()
-                .map((event) -> eventRegistryRepository.findByRewardedAndEvent(false, event).orElse(null))
-                .toList();
+        List<EventRegistry> registries = new ArrayList<>();
+        events.stream().forEach((event) ->
+                        registries.addAll(eventRegistryRepository.findAllByRewardedAndEvent(false, event)));
 
         return registries.stream()
                 .filter((Objects::nonNull))
