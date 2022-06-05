@@ -209,7 +209,7 @@ public class EventService {
                 .authType(event.getAuthType())
                 .timestamp(dateFormatter(eventRegistry.getTimestamp()))
                 .reward(event.getReward())
-                .isRewarded(eventRegistry.isRewarded())
+                .rewarded(eventRegistry.isRewarded() ? "Yes" : "Not yet")
                 .build();
     }
 

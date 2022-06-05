@@ -16,6 +16,6 @@ public class UserActivityDto {
     private String event;
     private String timestamp;
     private Double reward;
-    private boolean isRewarded;
+    private String rewarded;
     private AuthType authType;
 }
