@@ -4,6 +4,7 @@ import com.processorservice.config.exceptions.EventDataException;
 import com.processorservice.messaging.RabbitClient;
 import com.processorservice.models.dtos.EventRegistryDto;
 import com.processorservice.models.dtos.EventRequest;
+import com.processorservice.models.dtos.UserActivityDto;
 import com.processorservice.models.entities.*;
 import com.processorservice.models.enums.AuthType;
 import com.processorservice.models.enums.RoleType;
@@ -67,14 +68,23 @@ public class EventService {
         return eventRepository.findAllByInstitution(institutionService.getInstitutionByRepresentative());
     }
 
+    public List<UserActivityDto> getAllActivitiesForUser() {
+        User user = userDetailsService.getCurrentlyLoggedUser();
+        List<EventRegistry> registries = eventRegistryRepository.findAllByUser(user);
+        log.info("Retrieving all the event registries for user {}", user.getName());
+        return registries.stream()
+                .map((registry) -> createUserActivityDto(registry.getEvent(), user, registry))
+                .collect(Collectors.toList());
+    }
+
     public List<EventRegistryDto> getAllEventsByInstitutionNotValidated() {
         Institution institution = institutionService.getInstitutionByRepresentative();
         List<Event> events = eventRepository.findAllByInstitution(institution);
 
         List<EventRegistry> registries = new ArrayList<>();
         events.stream().forEach((event) ->
-                        registries.addAll(eventRegistryRepository.findAllByRewardedAndEvent(false, event)));
-
+                registries.addAll(eventRegistryRepository.findAllByRewardedAndEvent(false, event)));
+        log.info("Retrieving all the events that need validation for instiotution {}", institution.getName());
         return registries.stream()
                 .filter((Objects::nonNull))
                 .map(eventRegistry -> createEventRegistryDto(eventRegistry.getEvent(), eventRegistry.getUser(), eventRegistry))
@@ -189,6 +199,17 @@ public class EventService {
                 .authType(event.getAuthType())
                 .timestamp(dateFormatter(eventRegistry.getTimestamp()))
                 .reward(event.getReward())
+                .build();
+    }
+
+    private UserActivityDto createUserActivityDto(Event event, User user, EventRegistry eventRegistry) {
+        return UserActivityDto.builder()
+                .id(eventRegistry.getId())
+                .event(event.getName())
+                .authType(event.getAuthType())
+                .timestamp(dateFormatter(eventRegistry.getTimestamp()))
+                .reward(event.getReward())
+                .isRewarded(eventRegistry.isRewarded())
                 .build();
     }
 

@@ -1,9 +1,6 @@
 package com.processorservice.controllers;
 
-import com.processorservice.models.dtos.CardDto;
-import com.processorservice.models.dtos.EventRequest;
-import com.processorservice.models.dtos.RegisterRequest;
-import com.processorservice.models.dtos.UserDto;
+import com.processorservice.models.dtos.*;
 import com.processorservice.services.AuthMediumService;
 import com.processorservice.services.EventService;
 import com.processorservice.services.UserDetailsService;
@@ -70,5 +67,13 @@ public class CitizenController {
         return authMediumService.getAllCards().stream()
                 .map(CardConverter::convertCardToCardDto)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/users/activities")
+    @PreAuthorize("hasRole('ROLE_CITIZEN')")
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserActivityDto> getAllActivityForUser() {
+        log.info("Retrieving all the activity for logged in user.");
+        return eventService.getAllActivitiesForUser();
     }
 }
