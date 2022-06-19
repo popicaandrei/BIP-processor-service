@@ -137,7 +137,7 @@ public class EventService {
         }
 
         Event event = getActiveEventByName(eventRegistry.getEvent().getName());
-        User user = userService.findById(eventRegistry.getUser().getId());
+        User user = eventRegistry.getUser();
         User userValidator = userDetailsService.getCurrentlyLoggedUser();
         AuthMedium authMedium = authMediumService.getByUserAndAuthType(event.getAuthType(), user);
 
