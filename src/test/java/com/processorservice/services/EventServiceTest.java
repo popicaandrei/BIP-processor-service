@@ -20,7 +20,7 @@ import org.springframework.security.access.AccessDeniedException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -51,7 +51,7 @@ class EventServiceTest {
     EventService target;
 
     @BeforeEach
-    public void setup() {
+    public void setup(){
         MockitoAnnotations.initMocks(this);
     }
 
@@ -125,6 +125,41 @@ class EventServiceTest {
 
         verifyNoInteractions(rabbitClient);
         verify(eventRegistryRepository).save(any());
+    }
+
+    @Test
+    void validateEvent() {
+        AuthType eventAuthType = AuthType.CARD;
+        Event event = createEvent(EVENT_ID, EVENT_NAME, true, eventAuthType, true);
+        User userValidator = createUser(RoleType.INSTITUTION, WALLET_ADDRESS, USER_INSTITUTION_NAME);
+        User user = createUser(RoleType.CITIZEN, WALLET_ADDRESS, USER_NAME);
+        EventRegistry eventRegistry = createEventRegistry(false, event, user);
+        AuthMedium authMedium = createAuthMedium(eventAuthType, AUTH_MEDIUM_ID, IDENTIFICATOR, user);
+
+        when(eventRepository.findEventByNameAndActive(EVENT_NAME, true)).thenReturn(Optional.ofNullable(event));
+        when(eventRegistryRepository.findById(EVENT_REGISTRY_ID)).thenReturn(Optional.ofNullable(eventRegistry));
+        when(userDetailsService.getCurrentlyLoggedUser()).thenReturn(userValidator);
+        when(authMediumService.getByUserAndAuthType(eventAuthType, user)).thenReturn(authMedium);
+
+        target.validateEvent(EVENT_REGISTRY_ID);
+
+        verify(rabbitClient).send(any());
+        verify(eventRegistryRepository).save(eventRegistry);
+        assertTrue(eventRegistry.isRewarded());
+        assertEquals(USER_INSTITUTION_NAME, eventRegistry.getValidatorName());
+    }
+
+    @Test
+    void validateAlreadyRewardedEvent() {
+        Event event = createEvent(EVENT_ID, EVENT_NAME, true, AuthType.CARD, true);
+        User user = createUser(RoleType.CITIZEN, WALLET_ADDRESS, USER_NAME);
+        EventRegistry eventRegistry = createEventRegistry(true, event, user);
+
+        when(eventRegistryRepository.findById(EVENT_REGISTRY_ID)).thenReturn(Optional.ofNullable(eventRegistry));
+
+        assertThrows(EventDataException.class, () -> target.validateEvent(EVENT_REGISTRY_ID));
+
+        verifyNoInteractions(rabbitClient);
     }
 
     private EventRegistry createEventRegistry(boolean rewarded, Event event, User user) {
