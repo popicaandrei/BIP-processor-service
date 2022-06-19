@@ -109,9 +109,9 @@ public class EventService {
             log.info("Further validation is needed, the event is not sent to be rewarded");
             eventRegistry = createEventRegistry(event, user, false);
         } else {
+            eventRegistry = createEventRegistry(event, user, true);
             EventPayload eventPayload = createMessagePayload(eventRegistry, event, user, authMedium, user.getInstitution());
             log.info("Message payload is created in order to be sent for reward");
-            eventRegistry = createEventRegistry(event, user, true);
             rabbitClient.send(eventPayload);
         }
         eventRegistryRepository.save(eventRegistry);
