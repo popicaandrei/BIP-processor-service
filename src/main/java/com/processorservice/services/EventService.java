@@ -84,7 +84,7 @@ public class EventService {
         List<EventRegistry> registries = new ArrayList<>();
         events.stream().forEach((event) ->
                 registries.addAll(eventRegistryRepository.findAllByRewardedAndEvent(false, event)));
-        log.info("Retrieving all the events that need validation for instiotution {}", institution.getName());
+        log.info("Retrieving all the events that need validation for institution {}", institution.getName());
         return registries.stream()
                 .filter((Objects::nonNull))
                 .map(eventRegistry -> createEventRegistryDto(eventRegistry.getEvent(), eventRegistry.getUser(), eventRegistry))
