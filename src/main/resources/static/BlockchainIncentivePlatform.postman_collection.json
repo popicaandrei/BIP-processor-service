@@ -1,0 +1,362 @@
+{
+	"info": {
+		"_postman_id": "1498a482-0523-45fd-bdc0-5c863f1f32db",
+		"name": "BlockchainIncentivePlatform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18648470"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"manager@gmail.com\",\n    \"password\": \"pass\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Radu Birgauan\",\n    \"email\": \"radu@gmail.com\",\n    \"password\": \"pass\",\n    \"walletAddress\": \"erd453298\",\n    \"cityAddress\": {\n        \"street\": \"Street\",\n        \"number\": \"53\",\n        \"zipCode\": \"094753\"\n    },\n    \"phoneNumber\": \"073262233\",\n    \"role\": \"CITIZEN\",\n    \"institutionId\": 15\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetLoggedInUser",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{CITIZEN_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/users/16",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"16"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllUsersByInstitution",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "AddInstitution",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{INST_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Brasov\",\n    \"walletAddress\": \"erd49835fds\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/institutions",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"institutions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddEvent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/institutions/events",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"institutions",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllEventsByInstitution",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/institutions/events",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"institutions",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllEventsByInstitutionNotValidated",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/institutions/events",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"institutions",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ValidateMultipleEvents",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/institutions/events",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"institutions",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddCard",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{CITIZEN_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"324s72sd89s3922\",\n    \"number\": \"82736420842034534\",\n    \"validTo\": \"2024-01-01\",\n    \"validFrom\": \"2019-01-01\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users/cards",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllCards",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/users/cards",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserActivities",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "TriggerEvent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/public/events",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"public",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ValidateEvent",
+			"request": {
+				"method": "PUT",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Elrond - GetInstitutionBalance",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Elrond - GetCitizenBalance",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "CITIZEN_TOKEN",
+			"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwb3BpY2EuYW5kcmVpdmxhZEBnbWFpbC5jb20iLCJleHAiOjE2NTM2NzI3NDN9.saziPaYYILzXEU1xO7MnDKakm0UW0F7EfMJJGnjcRltk22uNC-3q1JKCNnh0jTAW1_2zx37FM9_J6mdXG86fkw"
+		},
+		{
+			"key": "ADMIN_TOKEN",
+			"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE2NTM3MzAyMzV9.ROAVUlfXsLD9NdSH7OZP5CMeN6BK3x4okryuWk_uAXs50i1N9bepPy4H4T6JHtrhYpOjhvzecYJJ-_LhAvgUbA",
+			"type": "string"
+		},
+		{
+			"key": "INST_TOKEN",
+			"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyQGdtYWlsLmNvbSIsImV4cCI6MTY1MzczMDI5NX0.nftgpesRgCeaRuMEPmfGD1cZ9HAkXObKztMLsixFATRTp9a8ZRH0U5eZwOt6UrJVO--PxS5A7_YEt6c_9louEQ",
+			"type": "string"
+		}
+	]
+}
