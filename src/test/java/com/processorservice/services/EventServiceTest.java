@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-class EventServiceTest {
+public class EventServiceTest {
 
     public static final String IDENTIFICATOR = "identificator";
     public static final String EVENT_NAME = "eventName";
