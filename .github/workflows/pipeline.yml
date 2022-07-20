@@ -7,8 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  processor-pipeline:
-
+  build:
     runs-on: ubuntu-latest
 
     steps:
