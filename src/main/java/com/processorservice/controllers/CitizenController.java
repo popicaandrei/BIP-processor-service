@@ -33,7 +33,7 @@ public class CitizenController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_INSTITUTION')")
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody RegisterRequest registerRequest) {
-        log.info("Registering new user with email: {}", registerRequest.getEmail());
+        log.info("Register new user with email: {}", registerRequest.getEmail());
         userService.register(registerRequest);
     }
 
