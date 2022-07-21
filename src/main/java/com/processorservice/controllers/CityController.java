@@ -58,7 +58,7 @@ public class CityController {
     @GetMapping("/events")
     @ResponseStatus(HttpStatus.OK)
     public List<EventDto> getAllEventCreatedByInstitution() {
-        log.info("Getting all the events for current institution.");
+        log.info("Retrieving all the events for current institution");
         return eventService.getAllEventsByInstitution().stream()
                 .map(EventConverter::convertEntityToDto)
                 .collect(Collectors.toList());
@@ -67,7 +67,7 @@ public class CityController {
     @GetMapping("/events/validate")
     @ResponseStatus(HttpStatus.OK)
     public List<EventRegistryDto> getAllEventsNotValidated() {
-        log.info("Getting all the events that needs validation.");
+        log.info("Getting all the events that needs validation");
         return eventService.getAllEventsByInstitutionNotValidated();
     }
 
